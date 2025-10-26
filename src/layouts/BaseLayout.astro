@@ -95,13 +95,37 @@ const reserveHref = '#reservation';
     <script>
       const toggle = document.querySelector('[data-menu-toggle]');
       const nav = document.querySelector('[data-mobile-nav]');
+      
+      function closeMenu() {
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.classList.remove('is-open');
+        nav.removeAttribute('data-open');
+        document.body.classList.remove('nav-open');
+      }
+      
+      function openMenu() {
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.classList.add('is-open');
+        nav.setAttribute('data-open', '');
+        document.body.classList.add('nav-open');
+      }
+      
       if (toggle && nav) {
         toggle.addEventListener('click', () => {
           const expanded = toggle.getAttribute('aria-expanded') === 'true';
-          toggle.setAttribute('aria-expanded', String(!expanded));
-          toggle.classList.toggle('is-open', !expanded);
-          nav.toggleAttribute('data-open', !expanded);
-          document.body.classList.toggle('nav-open', !expanded);
+          if (expanded) {
+            closeMenu();
+          } else {
+            openMenu();
+          }
+        });
+        
+        // メニューのリンクをクリックしたときにメニューを閉じる
+        const navLinks = nav.querySelectorAll('a');
+        navLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            closeMenu();
+          });
         });
       }
     </script>
