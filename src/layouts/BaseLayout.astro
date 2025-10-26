@@ -1,0 +1,111 @@
+---
+import '../styles/global.css';
+
+const {
+  title = '龍的厨房 | Ryuteki Kitchen',
+  description = '伝統とモダンが調和する高級中華レストラン「龍的厨房」公式サイト。',
+  lang = 'ja',
+  alternateHref = lang === 'ja' ? '/en/' : '/',
+  navLinks: providedNavLinks
+} = Astro.props;
+
+const navLinks =
+  providedNavLinks ??
+  (lang === 'ja'
+    ? [
+        { href: '#experience', label: '体験設計' },
+        { href: '#concept', label: 'コンセプト' },
+        { href: '#storytelling', label: 'ストーリーテリング' },
+        { href: '#results', label: '成果' },
+        { href: '#flow', label: '制作フロー' },
+        { href: '#reservation', label: '予約導線' }
+      ]
+    : [
+        { href: '#experience', label: 'Experience' },
+        { href: '#concept', label: 'Concept' },
+        { href: '#storytelling', label: 'Story' },
+        { href: '#results', label: 'Results' },
+        { href: '#flow', label: 'Process' },
+        { href: '#reservation', label: 'Reservations' }
+      ]);
+
+const languageSwitchLabel = lang === 'ja' ? 'EN' : '日本語';
+const reserveLabel = lang === 'ja' ? 'Web予約' : 'Reserve';
+const reserveHref = '#reservation';
+---
+
+<!doctype html>
+<html lang={lang} class="theme-dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="alternate" href={alternateHref} hreflang={lang === 'ja' ? 'en' : 'ja'} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href={lang === 'ja' ? '/' : '/en/'} aria-label="Ryuteki Kitchen home">
+          <span class="brand-line">龍的厨房</span>
+          <span class="brand-line">Ryuteki Kitchen</span>
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false">
+          <span class="menu-label">{lang === 'ja' ? 'メニュー' : 'Menu'}</span>
+          <span class="menu-icon" aria-hidden="true"></span>
+        </button>
+        <nav
+          class="primary-nav"
+          data-mobile-nav
+          aria-label={lang === 'ja' ? 'グローバルナビゲーション' : 'Primary navigation'}
+        >
+          <ul>
+            {navLinks.map(({ href, label }) => (
+              <li>
+                <a href={href}>{label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <div class="header-actions">
+          <a class="language-switch" href={alternateHref}>{languageSwitchLabel}</a>
+          <a class="primary-cta" href={reserveHref}>{reserveLabel}</a>
+        </div>
+      </div>
+    </header>
+    <main id="main" class="site-main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-logo">龍的厨房 Ryuteki Kitchen</p>
+          <p class="footer-meta">
+            {lang === 'ja'
+              ? '東京都内某所 ｜ 営業時間 11:30-15:00 / 17:30-22:30'
+              : 'Tokyo, Japan ｜ Open 11:30-15:00 / 17:30-22:30'}
+          </p>
+        </div>
+        <div class="footer-contact">
+          <a href="tel:+81300000000">+81-3-0000-0000</a>
+          <a href="mailto:reservation@ryuteki-kitchen.jp">reservation@ryuteki-kitchen.jp</a>
+        </div>
+      </div>
+    </footer>
+    <script>
+      const toggle = document.querySelector('[data-menu-toggle]');
+      const nav = document.querySelector('[data-mobile-nav]');
+      if (toggle && nav) {
+        toggle.addEventListener('click', () => {
+          const expanded = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', String(!expanded));
+          toggle.classList.toggle('is-open', !expanded);
+          nav.toggleAttribute('data-open', !expanded);
+          document.body.classList.toggle('nav-open', !expanded);
+        });
+      }
+    </script>
+  </body>
+</html>
