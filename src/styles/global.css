@@ -342,6 +342,11 @@ body.nav-open {
   font-size: 1.25rem;
 }
 
+.card-description {
+  margin-top: 0.5rem;
+  color: var(--color-text-muted);
+}
+
 .comparison {
   display: grid;
   gap: 1.5rem;
