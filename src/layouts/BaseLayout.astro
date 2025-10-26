@@ -66,11 +66,11 @@ const reserveHref = '#reservation';
               </li>
             ))}
           </ul>
+          <div class="header-actions">
+            <a class="language-switch" href={alternateHref}>{languageSwitchLabel}</a>
+            <a class="primary-cta" href={reserveHref}>{reserveLabel}</a>
+          </div>
         </nav>
-        <div class="header-actions">
-          <a class="language-switch" href={alternateHref}>{languageSwitchLabel}</a>
-          <a class="primary-cta" href={reserveHref}>{reserveLabel}</a>
-        </div>
       </div>
     </header>
     <main id="main" class="site-main">
