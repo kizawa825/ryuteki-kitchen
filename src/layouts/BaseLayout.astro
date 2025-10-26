@@ -95,23 +95,32 @@ const reserveHref = '#reservation';
     <script>
       const toggle = document.querySelector('[data-menu-toggle]');
       const nav = document.querySelector('[data-mobile-nav]');
+      const header = document.querySelector('.site-header');
       
       function closeMenu() {
+        if (!toggle || !nav || !header) return;
+        
         toggle.setAttribute('aria-expanded', 'false');
         toggle.classList.remove('is-open');
         nav.removeAttribute('data-open');
+        header.classList.remove('is-menu-open');
         document.body.classList.remove('nav-open');
       }
       
       function openMenu() {
+        if (!toggle || !nav || !header) return;
+        
         toggle.setAttribute('aria-expanded', 'true');
         toggle.classList.add('is-open');
         nav.setAttribute('data-open', '');
+        header.classList.add('is-menu-open');
         document.body.classList.add('nav-open');
       }
       
-      if (toggle && nav) {
-        toggle.addEventListener('click', () => {
+      if (toggle && nav && header) {
+        toggle.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           const expanded = toggle.getAttribute('aria-expanded') === 'true';
           if (expanded) {
             closeMenu();
@@ -126,6 +135,20 @@ const reserveHref = '#reservation';
           link.addEventListener('click', () => {
             closeMenu();
           });
+        });
+        
+        // ESCキーでメニューを閉じる
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && nav.hasAttribute('data-open')) {
+            closeMenu();
+          }
+        });
+        
+        // メニュー外をクリックしたときにメニューを閉じる
+        nav.addEventListener('click', (e) => {
+          if (e.target === nav) {
+            closeMenu();
+          }
         });
       }
     </script>
